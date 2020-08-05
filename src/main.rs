@@ -45,3 +45,9 @@ fn main() {
         println!("Usage: hippocrack '$SHA-256$...$...=' < dict.txt");
     }
 }
+
+#[test]
+fn test_get_digest() {
+    assert_eq!(get_digest(b"abc", b"abc"), "xO5TaQku5d7yn6zE+1Vl4Fw4u2Y2KuseLUbAoNjsh4I=");
+    assert_eq!(get_digest(b"admin", &base64::decode("HIlytXwnqSU=").unwrap()), "NqCi2sJoM4qAwQ8136GYueUVA/TSyidpAI3Evn+y/hc=");
+}
