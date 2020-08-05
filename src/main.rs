@@ -6,15 +6,15 @@ use sha2::{Sha256, Digest};
 const DIGEST_ITERATIONS : i32 = 1039;
 
 fn get_digest(password : &[u8], salt : &[u8]) -> String {
-    let mut hasher = Sha256::default();
-    hasher.input(salt);
-    hasher.input(password);
-    let mut digest = hasher.result();
+    let mut hasher = Sha256::new();
+    hasher.update(salt);
+    hasher.update(password);
+    let mut digest = hasher.finalize();
 
     for _ in 0..DIGEST_ITERATIONS {
-        hasher = Sha256::default();
-        hasher.input(digest);
-        digest = hasher.result();
+        hasher = Sha256::new();
+        hasher.update(digest);
+        digest = hasher.finalize();
     }
     return base64::encode(digest);
 }
