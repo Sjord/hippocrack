@@ -2,6 +2,7 @@ use std::env;
 use std::io::{self, BufRead};
 use base64;
 use sha2::{Sha256, Digest};
+use digest::FixedOutput;
 
 const DIGEST_ITERATIONS : i32 = 1039;
 
@@ -11,10 +12,10 @@ fn get_digest(password : &[u8], salt : &[u8]) -> String {
     hasher.update(password);
     let mut digest = hasher.finalize();
 
+    hasher = Sha256::new();
     for _ in 0..DIGEST_ITERATIONS {
-        hasher = Sha256::new();
         hasher.update(digest);
-        digest = hasher.finalize();
+        hasher.finalize_into_reset(&mut digest);
     }
     return base64::encode(digest);
 }
